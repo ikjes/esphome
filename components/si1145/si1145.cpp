@@ -1,5 +1,5 @@
 #include "si1145.h"
-
+#import "Arduino.h"
 #include <cmath>
 
 #include "esphome/core/log.h"

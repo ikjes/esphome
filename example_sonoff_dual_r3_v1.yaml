@@ -1,0 +1,99 @@
+esphome:
+  name: example_sonoff_dual_r3_v1
+  platform: ESP32
+  board: esp-wrover-kit
+
+logger:
+  level: WARN
+  baud_rate: 0
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+      inverted: True
+    name: "Cover button"
+    internal: True
+    on_click:
+      then:
+        - switch.toggle: switch_relay1
+    on_double_click:
+      then:
+        - switch.toggle: switch_relay2
+  # use this config for momentary switches
+  - platform: gpio
+    pin:
+      number: GPIO32
+      mode: INPUT_PULLUP
+      inverted: true
+    name: "Momentary switch 1"
+    internal: True
+    on_press:
+      then:
+        - switch.toggle: switch_relay1
+  - platform: gpio
+    pin:
+      number: GPIO33
+      mode: INPUT_PULLUP
+      inverted: true
+    name: "Momentary switch 2"
+    internal: True
+    on_press:
+      then:
+        - switch.toggle: switch_relay2
+  # use this config for latching switches
+  # - platform: gpio
+  #   pin:
+  #     number: GPIO32
+  #     mode: INPUT_PULLDOWN
+  #   name: "Latching switch 1"
+  #   internal: True
+  #   on_state:
+  #     then:
+  #       - switch.toggle: switch_relay1
+  # - platform: gpio
+  #   pin:
+  #     number: GPIO33
+  #     mode: INPUT_PULLDOWN
+  #   name: "Latching switch 2"
+  #   internal: True
+  #   on_state:
+  #     then:
+  #       - switch.toggle: switch_relay2
+
+status_led:
+  pin: 
+    number: GPIO13
+    inverted: true
+
+switch:
+  - platform: gpio
+    id: switch_relay1
+    pin:
+      number: GPIO27
+  - platform: gpio
+    id: switch_relay2
+    pin:
+      number: GPIO14
+
+sensor:
+  platform: cse7761
+  voltage:
+    name: CSE7761 Voltage
+  current_1:
+    name: CSE7761 Current 1
+  current_2:
+    name: CSE7761 Current 2
+  active_power_1:
+    name: CSE7761 Active Power 1
+  active_power_2:
+    name: CSE7761 Active Power 2
+  update_interval: 5s
+
+# cse7761 uart port
+uart:
+  tx_pin: GPIO25
+  rx_pin: GPIO26
+  baud_rate: 38400
+  parity: EVEN
